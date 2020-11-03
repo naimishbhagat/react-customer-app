@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Joi from "joi-browser";
 import Input from "../common/input";
-import { saveCustomer, getCustomer } from '../../services/customerService';
+import { saveCustomer, getCustomer, getCustomers } from '../../services/customerService';
 import StyledContainer from '../container/container.style';
+import { toast } from 'react-toastify';
 
 const CustomerForm = (props) => {
     const [data, setData] = useState({ data: { firstName: '', lastName: '', email: '' } });
@@ -72,9 +73,16 @@ const CustomerForm = (props) => {
     }
 
     const doSubmit = async () => {
-        await saveCustomer(data.data);
+        const { data: customers } = await getCustomers();
+        const formdata = data.data;
+        let exist = customers.find(c => c.email === formdata.email);
+        if (exist) {
+            toast.error('Customer with email already exist');
+        } else {
+            await saveCustomer(data.data);
+            props.history.push("/customers");
+        }
 
-        props.history.push("/customers");
     };
     const mapToViewModel = (customer) => {
         return {
