@@ -6,7 +6,7 @@ import StyledContainer from '../container/container.style';
 import { toast } from 'react-toastify';
 
 const CustomerForm = (props) => {
-    const [data, setData] = useState({ data: { firstName: '', lastName: '', email: '' } });
+    const [data, setData] = useState({ data: { firstName: '', lastName: '', dob: '', email: '' } });
     const [formErrors, setFormErrors] = useState({ errors: {} });
     const [loading, setLoading] = useState(false);
 
@@ -18,10 +18,13 @@ const CustomerForm = (props) => {
         lastName: Joi.string()
             .required()
             .label("Last Name"),
+        dob: Joi.string()
+            .required()
+            .label("Date of birth"),
         email: Joi.string()
             .required()
             .email()
-            .label("Email Address")
+            .label("Email")
     };
 
     const validate = () => {
@@ -74,22 +77,23 @@ const CustomerForm = (props) => {
 
     const doSubmit = async () => {
         const { data: customers } = await getCustomers();
+        const customerId = props.match.params.id;
         const formdata = data.data;
         let exist = customers.find(c => c.email === formdata.email);
-        if (exist) {
+        if (exist && customerId === "new") {
             toast.error('Customer with email already exist');
         } else {
             await saveCustomer(data.data);
             props.history.push("/customers");
         }
-
     };
     const mapToViewModel = (customer) => {
         return {
             id: customer.id,
             firstName: customer.firstName,
             lastName: customer.lastName,
-            email: customer.email
+            email: customer.email,
+            dob: customer.dob
         };
     }
 
@@ -149,6 +153,7 @@ const CustomerForm = (props) => {
                                         <form onSubmit={handleSubmit}>
                                             {renderInput("firstName", "First Name")}
                                             {renderInput("lastName", "Last Name")}
+                                            {renderInput("dob", "DOB", "date")}
                                             {renderInput("email", "email", "email")}
                                             {renderButton("Save")}
                                         </form>

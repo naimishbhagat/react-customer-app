@@ -5,12 +5,16 @@ const CustomerTable = (props) => {
     const { customers, onDelete } = props;
     // console.log(customers);
 
+    const convertDate = (date) => {
+        return new Date(date * 1000).toLocaleDateString("en-AU");
+    }
     return (
         <table className="table">
             <thead>
                 <tr>
                     <th>First Name</th>
                     <th>Last Name</th>
+                    <th>DOB</th>
                     <th>Email</th>
                     <th></th>
                 </tr>
@@ -20,6 +24,7 @@ const CustomerTable = (props) => {
                     <tr key={item.id}>
                         <td>{item.firstName}</td>
                         <td>{item.lastName}</td>
+                        <td>{item.dob}</td>
                         <td>{item.email}</td>
                         <td>
                             <Link to={`/customers/${item.id}`}
