@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import NavBar from './components/navbar/navbar';
-import Router from './utils/router';
+import AllRoutes from './utils/allRoutes';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <React.Fragment>
       <ToastContainer />
       <NavBar />
-      <Router />
+      <AllRoutes />
     </React.Fragment>
   );
 }
